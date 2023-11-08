@@ -5,7 +5,7 @@ import yc.dev.newsapi.data.model.remote.response.NewsResponse
 
 interface NewsService {
 
-    fun getTopHeadlines(
+    suspend fun getTopHeadlines(
         country: String,
         apiKey: String = BuildConfig.NEWS_API_KEY
     ): NewsResponse

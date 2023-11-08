@@ -3,6 +3,8 @@ package yc.dev.newsapi
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import yc.dev.newsapi.data.datasource.NewsDataSource
+import yc.dev.newsapi.data.model.remote.response.NewsResponse
 
 class NewsDataSourceTest {
 

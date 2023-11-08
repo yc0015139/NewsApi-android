@@ -1,10 +1,11 @@
 package yc.dev.newsapi.data.datasource
 
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
+import yc.dev.newsapi.data.service.NewsService
 
-class NewsDataSource {
+class NewsDataSource(private val newsService: NewsService) {
     fun getTopHeadlines(country: String): NewsResponse {
-        return NewsResponse("ok", 35)
+        return newsService.getTopHeadlines(country)
     }
 
 }

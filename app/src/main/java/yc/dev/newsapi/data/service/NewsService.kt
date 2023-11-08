@@ -7,6 +7,8 @@ interface NewsService {
 
     suspend fun getTopHeadlines(
         country: String,
-        apiKey: String = BuildConfig.NEWS_API_KEY
+        pageSize: Int,
+        page: Int,
+        apiKey: String = BuildConfig.NEWS_API_KEY,
     ): NewsResponse
 }

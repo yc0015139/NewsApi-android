@@ -9,8 +9,12 @@ class NewsDataSource(
     private val newsService: NewsService,
     private val dispatcher: CoroutineDispatcher,
 ) {
-    fun getTopHeadlines(country: String) = flow {
-        val response = newsService.getTopHeadlines(country)
+    fun getTopHeadlines(
+        country: String,
+        pageSize: Int,
+        page: Int,
+    ) = flow {
+        val response = newsService.getTopHeadlines(country, pageSize, page)
         emit(response)
     }.flowOn(dispatcher)
 

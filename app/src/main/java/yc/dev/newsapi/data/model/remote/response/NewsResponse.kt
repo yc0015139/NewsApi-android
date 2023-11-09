@@ -9,3 +9,10 @@ data class NewsResponse(
     val totalResults: Int,
     val articles: List<Article>,
 )
+
+@Serializable
+data class NewsErrorResponse(
+    val status: String,
+    val code: String? = null,
+    val message: String = "",
+)

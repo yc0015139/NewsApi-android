@@ -3,7 +3,6 @@ package yc.dev.newsapi.data.service
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-import yc.dev.newsapi.BuildConfig
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 
 interface NewsService {
@@ -13,6 +12,6 @@ interface NewsService {
         @Query("country") country: String,
         @Query("pageSize") pageSize: Int,
         @Query("page") page: Int,
-        @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+        @Query("apiKey") apiKey: String,
     ): Response<NewsResponse>
 }

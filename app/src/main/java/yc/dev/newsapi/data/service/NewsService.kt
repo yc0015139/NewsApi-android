@@ -10,8 +10,6 @@ interface NewsService {
     @GET("v2/top-headlines")
     suspend fun getTopHeadlines(
         @Query("country") country: String,
-        @Query("pageSize") pageSize: Int,
-        @Query("page") page: Int,
         @Query("apiKey") apiKey: String,
     ): Response<NewsResponse>
 }

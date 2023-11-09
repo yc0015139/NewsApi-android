@@ -50,7 +50,7 @@ class NewsDataSourceTest {
         mockWebServer.enqueueResponse("api_get_top_head_lines_success.json", HttpURLConnection.HTTP_OK)
 
         // Act
-        val response = newsDataSource.getTopHeadlines("us", 10, 1)
+        val response = newsDataSource.getTopHeadlines("us")
 
         // Assert
         val actual = assertIs<ApiResult.Success<NewsResponse>>(response).result
@@ -77,7 +77,7 @@ class NewsDataSourceTest {
         )
 
         // Act
-        val response = newsDataSource.getTopHeadlines("us", 10, 0, apiKey = "")
+        val response = newsDataSource.getTopHeadlines("us", apiKey = "")
 
         // Assert
         val apiResult = assertIs<ApiResult.Error<NewsErrorResponse>>(response)

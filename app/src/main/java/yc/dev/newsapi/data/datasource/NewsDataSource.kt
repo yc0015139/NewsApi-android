@@ -12,11 +12,9 @@ class NewsDataSource(
 
     suspend fun getTopHeadlines(
         country: String,
-        pageSize: Int,
-        page: Int,
         apiKey: String = BuildConfig.NEWS_API_KEY,
     ): ApiResult {
-        val response = newsService.getTopHeadlines(country, pageSize, page, apiKey)
+        val response = newsService.getTopHeadlines(country, apiKey)
         if (response.isSuccessful) {
             val result = response.body() ?: throw IllegalStateException("Response is successful but response body is null.")
             return ApiResult.Success(result)

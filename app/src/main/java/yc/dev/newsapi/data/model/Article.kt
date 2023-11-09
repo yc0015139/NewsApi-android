@@ -1,5 +1,8 @@
 package yc.dev.newsapi.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Article(
     val source: Source,
     val author: String = "",
@@ -11,6 +14,7 @@ data class Article(
     val content: String = "",
 )
 
+@Serializable
 data class Source(
     val id: String = "",
     val name: String = "",

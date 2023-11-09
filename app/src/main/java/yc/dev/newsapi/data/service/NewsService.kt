@@ -1,5 +1,6 @@
 package yc.dev.newsapi.data.service
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import yc.dev.newsapi.BuildConfig
@@ -13,5 +14,5 @@ interface NewsService {
         @Query("pageSize") pageSize: Int,
         @Query("page") page: Int,
         @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
-    ): NewsResponse
+    ): Response<NewsResponse>
 }

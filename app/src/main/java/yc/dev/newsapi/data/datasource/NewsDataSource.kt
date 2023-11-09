@@ -1,21 +1,20 @@
 package yc.dev.newsapi.data.datasource
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import yc.dev.newsapi.data.service.NewsService
+import yc.dev.newsapi.utils.api.ApiResult
 
 class NewsDataSource(
     private val newsService: NewsService,
-    private val dispatcher: CoroutineDispatcher,
 ) {
-    fun getTopHeadlines(
+
+    suspend fun getTopHeadlines(
         country: String,
         pageSize: Int,
         page: Int,
-    ) = flow {
+    ): ApiResult {
         val response = newsService.getTopHeadlines(country, pageSize, page)
-        emit(response)
-    }.flowOn(dispatcher)
+        val result = response.body()
+        return ApiResult.Success(result)
+    }
 
 }

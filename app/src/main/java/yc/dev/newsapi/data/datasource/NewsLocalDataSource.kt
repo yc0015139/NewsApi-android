@@ -10,4 +10,8 @@ class NewsLocalDataSource(
     fun saveData(articles: List<Article>) {
 
     }
+
+    fun getArticles(page: Int, pageSize: Int): List<Article> {
+        return emptyList()
+    }
 }

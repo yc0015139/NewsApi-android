@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import yc.dev.newsapi.data.datasource.NewsDataSource
 import yc.dev.newsapi.data.datasource.NewsLocalDataSource
-import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.ui.state.UiState
 import yc.dev.newsapi.utils.api.ApiResult
@@ -25,5 +24,10 @@ class NewsRepository(
 
             is ApiResult.Error<*> -> emit(UiState.Error)
         }
+    }.flowOn(dispatcher)
+
+    suspend fun getArticles(page: Int, pageSize: Int) = flow {
+        val articles = newsLocalDataSource.getArticles(page, pageSize)
+        emit(articles)
     }.flowOn(dispatcher)
 }

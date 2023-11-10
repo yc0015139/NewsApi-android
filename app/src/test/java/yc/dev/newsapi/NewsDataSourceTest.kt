@@ -39,21 +39,21 @@ class NewsDataSourceTest {
     @Test
     fun callGetTopHeadlines_getResponseSuccessfully() = runTest {
         // Arrange
-        val expectedResponse = NewsResponse(
+        val fakeResponse = NewsResponse(
             status = "ok",
             totalResults = 36,
             articles = listOf(),
         )
         val expected = ApiResult.Success(
-            result = expectedResponse
-        ).result
+            response = fakeResponse
+        ).response
         mockWebServer.enqueueResponse("api_get_top_head_lines_success.json", HttpURLConnection.HTTP_OK)
 
         // Act
         val response = newsDataSource.getTopHeadlines("us")
 
         // Assert
-        val actual = assertIs<ApiResult.Success<NewsResponse>>(response).result
+        val actual = assertIs<ApiResult.Success<NewsResponse>>(response).response
         assertEquals(expected.status, actual.status)
         assertEquals(expected.totalResults, actual.totalResults)
     }
@@ -61,14 +61,14 @@ class NewsDataSourceTest {
     @Test
     fun callGetTopHeadlines_getResponseErrorWithApiKeyInvalid() = runTest {
         // Arrange
-        val expectedResponse = NewsErrorResponse(
+        val fakeResponse = NewsErrorResponse(
             status = "error",
             code = "apiKeyInvalid",
             message = "Your API key is invalid or incorrect. Check your key, or go to https://newsapi.org to create a free API key.",
         )
         val expectedApiResult = ApiResult.Error(
             code = HttpURLConnection.HTTP_UNAUTHORIZED,
-            errorResult = expectedResponse,
+            errorResult = fakeResponse,
         )
         val expected = expectedApiResult.errorResult
         mockWebServer.enqueueResponse(

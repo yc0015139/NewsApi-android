@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("io.realm.kotlin")
 }
 
 android {
@@ -98,6 +99,9 @@ dependencies {
     // Kotlin serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    // Realm
+    implementation("io.realm.kotlin:library-base:1.11.0")
 
     // Test libs
     // JUnit

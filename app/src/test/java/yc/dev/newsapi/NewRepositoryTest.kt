@@ -11,10 +11,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import yc.dev.newsapi.data.datasource.NewsDataSource
 import yc.dev.newsapi.data.datasource.NewsLocalDataSource
+import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.data.repository.NewsRepository
 import yc.dev.newsapi.ui.state.UiState
 import yc.dev.newsapi.utils.api.ApiResult
+import java.net.HttpURLConnection
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -41,14 +43,14 @@ class NewRepositoryTest {
     fun loadNewsData_loadSuccessfulAndSaveToNewsLocalDataSource() = runTest {
         // Arrange
         val expected: UiState = UiState.Success
-        val fakeResponse = ApiResult.Success(
+        val fakeResult = ApiResult.Success(
             response = NewsResponse(
                 status = "ok",
                 totalResults = 3,
                 articles = listOf()
             )
         )
-        coEvery { mockNewsDataSource.getTopHeadlines(country = any()) } returns fakeResponse
+        coEvery { mockNewsDataSource.getTopHeadlines(country = any()) } returns fakeResult
         coEvery { mockNewsLocalDataSource.saveData(articles = any()) } just Runs
 
         // Act
@@ -58,4 +60,28 @@ class NewRepositoryTest {
         assertEquals(expected, actual)
         coVerify { mockNewsLocalDataSource.saveData(any()) }
     }
+
+    @Test
+    fun loadNewsData_loadError() = runTest {
+        // Arrange
+        val expected: UiState = UiState.Error
+        val fakeResponse = NewsErrorResponse(
+            status = "error",
+            code = "apiKeyInvalid",
+            message = "Your API key is invalid or incorrect. Check your key, or go to https://newsapi.org to create a free API key.",
+        )
+        val fakeResult = ApiResult.Error(
+            code = HttpURLConnection.HTTP_UNAUTHORIZED,
+            errorResult = fakeResponse,
+        )
+        coEvery { mockNewsDataSource.getTopHeadlines(country = any()) } returns fakeResult
+
+        // Act
+        val actual = newsRepository.loadNewsData("us").first()
+
+        // Assert
+        assertEquals(expected, actual)
+        coVerify(exactly = 0) { mockNewsLocalDataSource.saveData(any()) }
+    }
+
 }

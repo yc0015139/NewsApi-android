@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import yc.dev.newsapi.data.datasource.NewsDataSource
 import yc.dev.newsapi.data.datasource.NewsLocalDataSource
+import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.ui.state.UiState
 import yc.dev.newsapi.utils.api.ApiResult
@@ -16,15 +17,13 @@ class NewsRepository(
 ) {
     suspend fun loadNewsData(country: String) = flow {
         when (val result = newsDataSource.getTopHeadlines(country)) {
-            is ApiResult.Success<*> -> {
-                val newsResponse = (result.response as? NewsResponse)
-                newsResponse?.let {
-                    newsLocalDataSource.saveData(it.articles)
-                    emit(UiState.Success)
-                } ?: TODO()
+            is ApiResult.Success<NewsResponse> -> {
+                val articles = result.response.articles
+                newsLocalDataSource.saveData(articles)
+                emit(UiState.Success)
             }
 
-            is ApiResult.Error<*> -> TODO()
+            is ApiResult.Error<*> -> emit(UiState.Error)
         }
     }.flowOn(dispatcher)
 }

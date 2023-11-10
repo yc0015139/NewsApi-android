@@ -3,6 +3,7 @@ package yc.dev.newsapi.data.datasource
 import kotlinx.serialization.json.Json
 import yc.dev.newsapi.BuildConfig
 import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
+import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.data.service.NewsService
 import yc.dev.newsapi.utils.api.ApiResult
 
@@ -13,10 +14,11 @@ class NewsDataSource(
     suspend fun getTopHeadlines(
         country: String,
         apiKey: String = BuildConfig.NEWS_API_KEY,
-    ): ApiResult {
+    ): ApiResult<NewsResponse> {
         val response = newsService.getTopHeadlines(country, apiKey)
         if (response.isSuccessful) {
-            val result = response.body() ?: throw IllegalStateException("Response is successful but response body is null.")
+            val result = response.body()
+                ?: throw IllegalStateException("Response is successful but response body is null.")
             return ApiResult.Success(result)
         }
 

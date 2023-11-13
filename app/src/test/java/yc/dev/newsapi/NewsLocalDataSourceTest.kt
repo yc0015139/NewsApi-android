@@ -6,6 +6,7 @@ import io.realm.kotlin.ext.query
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import yc.dev.newsapi.data.datasource.NewsLocalDataSource
+import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.model.local.realm.RealmArticle
 import yc.dev.newsapi.data.model.local.realm.RealmSource
 import yc.dev.newsapi.data.model.local.realm.toArticle
@@ -70,7 +71,7 @@ class NewsLocalDataSourceTest {
     @Test
     fun getArticlesInFirstPageAndThePageSizeAsThree_getAllOfData() = runTest {
         // Arrange
-        val expected = fakeArticles.subList(0, 3) // [a, b, c] -> [a, b, c]
+        val expected = fakeArticles // [a, b, c]
 
         // Act
         newsLocalDataSource.replaceAllArticles(fakeArticles)
@@ -101,6 +102,45 @@ class NewsLocalDataSourceTest {
         // Act
         newsLocalDataSource.replaceAllArticles(fakeArticles)
         val actual = newsLocalDataSource.getArticles(page = 2, pageSize = 1)
+
+        // Assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun getArticlesInIllegalPageAndThePageSizeAsThree_getAllOfData() = runTest {
+        // Arrange
+        val expected = fakeArticles // [a, b, c]
+
+        // Act
+        newsLocalDataSource.replaceAllArticles(fakeArticles)
+        val actual = newsLocalDataSource.getArticles(page = -999, pageSize = 3)
+
+        // Assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun getArticlesInThirdPageAndThePageSizeIsIllegal_getEmpty() = runTest {
+        // Arrange
+        val expected = emptyList<Article>() // []
+
+        // Act
+        newsLocalDataSource.replaceAllArticles(fakeArticles)
+        val actual = newsLocalDataSource.getArticles(page = 3, pageSize = -999)
+
+        // Assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun getArticlesInIllegalPageAndThePageSizeIsIllegal_getEmpty() = runTest {
+        // Arrange
+        val expected = emptyList<Article>() // []
+
+        // Act
+        newsLocalDataSource.replaceAllArticles(fakeArticles)
+        val actual = newsLocalDataSource.getArticles(page = -999, pageSize = -999)
 
         // Assert
         assertEquals(expected, actual)

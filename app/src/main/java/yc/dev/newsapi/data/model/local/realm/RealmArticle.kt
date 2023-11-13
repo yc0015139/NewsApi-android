@@ -1,10 +1,14 @@
 package yc.dev.newsapi.data.model.local.realm
 
 import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.model.Source
 
 class RealmArticle() : RealmObject {
+    @Index
+    var index: Int = 0
+        private set
     var source: RealmSource? = null
         private set
     var author: String = ""
@@ -22,8 +26,9 @@ class RealmArticle() : RealmObject {
     var content: String = ""
         private set
 
-    constructor(article: Article): this(){
+    constructor(index: Int, article: Article): this(){
         article.let {
+            this.index = index
             source = it.source?.let { s -> RealmSource(s) }
             author = it.author
             title = it.title

@@ -18,7 +18,7 @@ class NewsRepository(
         when (val result = newsDataSource.getTopHeadlines(country)) {
             is ApiResult.Success<NewsResponse> -> {
                 val articles = result.response.articles
-                newsLocalDataSource.saveData(articles)
+                newsLocalDataSource.replaceAllArticles(articles)
                 emit(UiState.Success)
             }
 

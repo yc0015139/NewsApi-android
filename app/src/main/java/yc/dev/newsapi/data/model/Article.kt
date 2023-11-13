@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Article(
-    val source: Source,
+    val source: Source? = null,
     val author: String = "",
     val title: String = "",
     val description: String = "",

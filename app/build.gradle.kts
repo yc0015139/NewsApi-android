@@ -103,6 +103,10 @@ dependencies {
     // Realm
     implementation("io.realm.kotlin:library-base:1.11.0")
 
+    // Paging
+    val pagingVersion = "3.2.1"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+
     // Test libs
     // JUnit
     testImplementation("junit:junit:4.13.2")
@@ -119,6 +123,9 @@ dependencies {
 
     // Mock Web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
+    // Paging test
+    testImplementation("androidx.paging:paging-testing:$pagingVersion")
 
     // Debug libs
     // Compose

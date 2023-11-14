@@ -146,5 +146,16 @@ class NewsLocalDataSourceTest {
         assertEquals(expected, actual)
     }
 
-    // TODO: Add test cases for load page that over data size
+    @Test
+    fun getArticlesThatPageNumberIsExceedsPageSize_getEmpty() = runTest {
+        // Arrange
+        val expected = emptyList<Article>() // []
+
+        // Act
+        newsLocalDataSource.replaceAllArticles(fakeArticles)
+        val actual = newsLocalDataSource.getArticles(page = 6, pageSize = 2)
+
+        // Assert
+        assertEquals(expected, actual)
+    }
 }

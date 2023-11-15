@@ -1,8 +1,14 @@
 package yc.dev.newsapi
 
+import androidx.paging.PagingConfig
+import androidx.paging.PagingSource.LoadResult
+import androidx.paging.testing.SnapshotLoader
+import androidx.paging.testing.asSnapshot
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -11,6 +17,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import yc.dev.newsapi.data.datasource.NewsDataSource
 import yc.dev.newsapi.data.datasource.NewsLocalDataSource
+import yc.dev.newsapi.data.datasource.NewsPagingSource
+import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.data.repository.NewsRepository
@@ -23,19 +31,24 @@ import kotlin.test.assertEquals
 
 class NewRepositoryTest {
 
+    @MockK
     private lateinit var mockNewsDataSource: NewsDataSource
+
+    @MockK
     private lateinit var mockNewsLocalDataSource: NewsLocalDataSource
+    private lateinit var mockNewsPagingSource: NewsPagingSource
     private lateinit var newsRepository: NewsRepository
 
     @Before
     fun setup() {
-        mockNewsDataSource = mockk()
-        mockNewsLocalDataSource = mockk()
+        MockKAnnotations.init(this@NewRepositoryTest)
+        mockNewsPagingSource = mockk(relaxed = true)
 
         val testDispatcher = UnconfinedTestDispatcher()
         newsRepository = NewsRepository(
             newsDataSource = mockNewsDataSource,
             newsLocalDataSource = mockNewsLocalDataSource,
+            newsPagingSource = mockNewsPagingSource,
             dispatcher = testDispatcher,
         )
     }
@@ -86,18 +99,40 @@ class NewRepositoryTest {
     }
 
     @Test
-    fun getArticles_getFromLocalDataSourceSuccessfully() = runTest {
+    fun getArticlesWithPageSizeAsOneAndScrollToFirstItem_obtainTheFirstAndTheSecondData() = runTest {
         // Arrange
-        val expected = fakeArticles
-        coEvery { mockNewsLocalDataSource.getArticles(any(), any()) } returns expected
+        val expected = fakeArticles.subList(0, 2) // [a, b, c] > [a, b]
+
+        val fakeFirstLoad = fakeArticles.subList(0, 1) // [a, b, c] > [a]
+        val fakeSecondLoad = fakeArticles.subList(1, 2) // [a, b, c] > [b]
+        val fakeThirdLoad = fakeArticles.subList(2, 3) // [a, b, c] > [c]
+        val fakeFourthLoad = emptyList<Article>() // []
+        coEvery { mockNewsPagingSource.load(any()) } returnsMany listOf(
+            LoadResult.Page(fakeFirstLoad, null, 2),
+            LoadResult.Page(fakeSecondLoad, 2, 3),
+            LoadResult.Page(fakeThirdLoad, 3, 4),
+            LoadResult.Page(fakeFourthLoad, 4, null),
+        )
 
         // Act
-        val page = 1
-        val pageSize = 10
-        val actual = newsRepository.getArticles(page, pageSize).first()
+        val actual = newsRepository.getArticles(pageSize = 1).asSnapshot {
+            // Scroll to first item
+            scrollTo(0)
+        }
 
         // Assert
-        coVerify { mockNewsLocalDataSource.getArticles(page, pageSize) }
+        /**
+         * When pageSize = 1 and the [SnapshotLoader] scroll to index 0. The `mockNewsPagingSource.load()` should be called twice.
+         *
+         * `PagingConfig.initialLoadSize = pageSize` had been set in [NewsRepository.getArticles] and
+         *  [PagingConfig.prefetchDistance] as [PagingConfig.pageSize] on default.
+         * So the `mockNewsPagingSource.load()` will be called
+         *  [PagingConfig.initialLoadSize] + [PagingConfig.prefetchDistance]
+         *    = pageSize + pageSize
+         *    = 1 + 1 = 2
+         *  times.
+         */
+        coVerify(exactly = 2) { mockNewsPagingSource.load(any()) }
         assertEquals(expected, actual)
     }
 }

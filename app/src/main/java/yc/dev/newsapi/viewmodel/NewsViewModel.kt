@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.repository.NewsRepository
@@ -41,7 +42,7 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             newsRepository.getArticles(constants.newsPageSize)
                 .cachedIn(viewModelScope)
-                .collect {
+                .collectLatest {
                     _articlesState.value = it
                 }
         }

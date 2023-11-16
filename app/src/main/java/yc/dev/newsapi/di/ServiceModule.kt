@@ -19,7 +19,7 @@ object ServiceModule {
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl("https://newsapi.org/")
-        .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+        .addConverterFactory(Json { coerceInputValues = true }.asConverterFactory(MediaType.get("application/json")))
         .build()
 
     @Singleton

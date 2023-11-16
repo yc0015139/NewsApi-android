@@ -107,6 +107,12 @@ dependencies {
     val pagingVersion = "3.2.1"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
 
+    // SwipeRefreshLayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Test libs
     // JUnit
     testImplementation("junit:junit:4.13.2")

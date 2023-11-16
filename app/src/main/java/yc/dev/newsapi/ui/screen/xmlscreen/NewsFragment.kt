@@ -9,22 +9,22 @@ import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import yc.dev.newsapi.R
 import yc.dev.newsapi.databinding.FragmentContainerBinding
-import yc.dev.newsapi.databinding.FragmentXxxBinding
+import yc.dev.newsapi.databinding.FragmentNewsBinding
 
 @AndroidEntryPoint
-class XxxFragment : Fragment(R.layout.fragment_xxx) {
-    private val binding by viewBinding(FragmentXxxBinding::bind)
+class NewsFragment : Fragment(R.layout.fragment_news) {
+    private val binding by viewBinding(FragmentNewsBinding::bind)
 
     companion object {
-        fun newInstance() = XxxFragment()
+        fun newInstance() = NewsFragment()
     }
 }
 
 @Composable
-fun XxxFragmentScreen(fm: FragmentManager) {
+fun NewsFragmentScreen(fm: FragmentManager) {
     AndroidViewBinding(FragmentContainerBinding::inflate) {
         fm.commit {
-            replace(fragmentContainerView.id, XxxFragment.newInstance())
+            replace(fragmentContainerView.id, NewsFragment.newInstance())
         }
     }
 }

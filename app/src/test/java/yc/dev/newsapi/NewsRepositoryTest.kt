@@ -29,7 +29,7 @@ import java.net.HttpURLConnection
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class NewRepositoryTest {
+class NewsRepositoryTest {
 
     @MockK
     private lateinit var mockNewsDataSource: NewsDataSource
@@ -41,7 +41,7 @@ class NewRepositoryTest {
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this@NewRepositoryTest)
+        MockKAnnotations.init(this@NewsRepositoryTest)
         mockNewsPagingSource = mockk(relaxed = true)
 
         val testDispatcher = UnconfinedTestDispatcher()
@@ -98,6 +98,9 @@ class NewRepositoryTest {
         coVerify(exactly = 0) { mockNewsLocalDataSource.replaceAllArticles(any()) }
     }
 
+    /**
+     * See also [NewsViewModelTest.executeGetArticlesInInitBlock_verifyArticlesStateObtainTheFirstAndTheSecondData]
+     */
     @Test
     fun getArticlesWithPageSizeAsOneAndScrollToFirstItem_obtainTheFirstAndTheSecondData() = runTest {
         // Arrange

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.repository.NewsRepository
+import yc.dev.newsapi.ui.Constants
 import yc.dev.newsapi.ui.state.UiState
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
     private val dispatcher: CoroutineDispatcher,
+    private val constants: Constants,
 ) : ViewModel() {
 
     private val _articlesState: MutableStateFlow<PagingData<Article>> = MutableStateFlow(value = PagingData.empty())
@@ -37,7 +39,7 @@ class NewsViewModel @Inject constructor(
 
     private fun observeArticles() {
         viewModelScope.launch(dispatcher) {
-            newsRepository.getArticles(PAGE_SIZE)
+            newsRepository.getArticles(constants.newsPageSize)
                 .cachedIn(viewModelScope)
                 .collect {
                     _articlesState.value = it
@@ -56,7 +58,6 @@ class NewsViewModel @Inject constructor(
     }
 
     companion object {
-        private const val PAGE_SIZE = 10
         private const val COUNTRY_US = "us"
     }
 }

@@ -6,8 +6,9 @@ import yc.dev.newsapi.data.model.remote.response.NewsErrorResponse
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.data.service.NewsService
 import yc.dev.newsapi.utils.api.ApiResult
+import javax.inject.Inject
 
-class NewsDataSource(
+class NewsDataSource @Inject constructor(
     private val newsService: NewsService,
 ) {
 

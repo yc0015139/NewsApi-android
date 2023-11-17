@@ -8,16 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import yc.dev.newsapi.R
 import yc.dev.newsapi.databinding.FragmentContainerBinding
 import yc.dev.newsapi.databinding.FragmentNewsBinding
 import yc.dev.newsapi.ui.state.UiState
 import yc.dev.newsapi.utils.addTopSpacingForFirstItem
+import yc.dev.newsapi.utils.launchWhenStarted
 import yc.dev.newsapi.viewmodel.NewsViewModel
 
 @AndroidEntryPoint
@@ -54,7 +53,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
     }
 
     private fun observeLoadingState() {
-        lifecycleScope.launch {
+        launchWhenStarted {
             viewModel.loadingState.collect {
                 binding.splNews.isRefreshing = it == null
                 makeNotice(it)
@@ -69,7 +68,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
     }
 
     private fun observeArticlesState() {
-        lifecycleScope.launch {
+        launchWhenStarted {
             viewModel.articlesState.collect {
                 pagingAdapter.submitData(it)
             }

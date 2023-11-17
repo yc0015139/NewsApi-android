@@ -56,15 +56,15 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         launchWhenStarted {
             viewModel.loadingState.collect {
                 binding.splNews.isRefreshing = it == null
-                makeNotice(it)
+                makeNotification(it)
             }
         }
     }
 
-    private fun makeNotice(uiState: UiState?) {
+    private fun makeNotification(uiState: UiState?) {
         if (uiState != UiState.Error) return
 
-        Snackbar.make(binding.coordinatorLayout, "Something wrong when loading news.", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.coordinatorLayout, "OOPS! Something wrong when loading :(", Snackbar.LENGTH_LONG).show()
     }
 
     private fun observeArticlesState() {

@@ -1,5 +1,7 @@
 package yc.dev.newsapi
 
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -13,6 +15,7 @@ import yc.dev.newsapi.testutils.enqueueResponse
 import yc.dev.newsapi.testutils.service
 import yc.dev.newsapi.utils.api.ApiResult
 import java.net.HttpURLConnection
+import java.net.UnknownHostException
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -81,6 +84,28 @@ class NewsDataSourceTest {
 
         // Assert
         val apiResult = assertIs<ApiResult.Error<NewsErrorResponse>>(response)
+        assertEquals(expectedApiResult.code, apiResult.code)
+        val actual = apiResult.errorResult
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun callGetTopHeadlines_getErrorWithUnknownHostException() = runTest {
+        // Arrange
+        val expected = "java.net.UnknownHostException"
+        val expectedApiResult = ApiResult.Error(
+            code = -1,
+            errorResult = "java.net.UnknownHostException"
+        )
+        mockNewsService = mockk()
+        coEvery { mockNewsService.getTopHeadlines(any(), any()) } throws UnknownHostException()
+        newsDataSource = NewsDataSource(mockNewsService)
+
+        // Act
+        val response = newsDataSource.getTopHeadlines("us")
+
+        // Assert
+        val apiResult = assertIs<ApiResult.Error<String>>(response)
         assertEquals(expectedApiResult.code, apiResult.code)
         val actual = apiResult.errorResult
         assertEquals(expected, actual)

@@ -16,6 +16,7 @@ class NewsDataSource @Inject constructor(
         country: String,
         apiKey: String = BuildConfig.NEWS_API_KEY,
     ): ApiResult<NewsResponse> {
+        // TODO: Fix network error exception
         val response = newsService.getTopHeadlines(country, apiKey)
         if (response.isSuccessful) {
             val result = response.body()

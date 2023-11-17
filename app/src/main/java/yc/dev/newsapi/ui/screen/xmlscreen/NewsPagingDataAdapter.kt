@@ -41,13 +41,5 @@ class NewsPagingHolder(
             binding.ivArticle.loadFromWeb(urlToImage)
             binding.tvTitle.text = title
         }
-
-        modifyImageHeight(binding.ivArticle)
-    }
-
-    private fun modifyImageHeight(imageView: ImageView) {
-        val params = imageView.layoutParams
-        params.height = params.width
-        imageView.layoutParams = params
     }
 }

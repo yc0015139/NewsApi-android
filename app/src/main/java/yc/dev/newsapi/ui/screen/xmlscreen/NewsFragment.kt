@@ -17,6 +17,7 @@ import yc.dev.newsapi.R
 import yc.dev.newsapi.databinding.FragmentContainerBinding
 import yc.dev.newsapi.databinding.FragmentNewsBinding
 import yc.dev.newsapi.ui.state.UiState
+import yc.dev.newsapi.utils.addTopSpacingForFirstItem
 import yc.dev.newsapi.viewmodel.NewsViewModel
 
 @AndroidEntryPoint
@@ -43,6 +44,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
     }
 
     private fun setupRecyclerView() {
+        binding.rvNews.addTopSpacingForFirstItem(dp = 16)
         binding.rvNews.adapter = pagingAdapter
     }
 

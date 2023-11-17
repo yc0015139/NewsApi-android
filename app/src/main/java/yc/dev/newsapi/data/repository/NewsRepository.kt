@@ -14,8 +14,9 @@ import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.model.remote.response.NewsResponse
 import yc.dev.newsapi.ui.state.UiState
 import yc.dev.newsapi.utils.api.ApiResult
+import javax.inject.Inject
 
-class NewsRepository(
+class NewsRepository @Inject constructor(
     private val newsDataSource: NewsDataSource,
     private val newsLocalDataSource: NewsLocalDataSource,
     private val newsPagingSource: NewsPagingSource,

@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import yc.dev.newsapi.ui.route.Route
 import yc.dev.newsapi.ui.screen.composescreen.XxxComposeScreen
 import yc.dev.newsapi.ui.screen.homescreen.HomeScreen
-import yc.dev.newsapi.ui.screen.xmlscreen.XxxFragmentScreen
+import yc.dev.newsapi.ui.screen.xmlscreen.NewsFragmentScreen
 import yc.dev.newsapi.ui.theme.NewsApiTheme
 import yc.dev.newsapi.utils.compose.safeComposable
 
@@ -44,7 +44,7 @@ private fun SetupNavigation() {
 
     NavHost(navController = navController, startDestination = Route.Home.route) {
         composable(Route.Home.route) { HomeScreen(navController = navController) }
-        safeComposable(Route.Xml.route) { XxxFragmentScreen(fm) }
+        safeComposable(Route.Xml.route) { NewsFragmentScreen(fm) }
         safeComposable(Route.Compose.route) { XxxComposeScreen() }
     }
 }

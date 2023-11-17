@@ -6,9 +6,10 @@ import io.realm.kotlin.ext.query
 import yc.dev.newsapi.data.model.Article
 import yc.dev.newsapi.data.model.local.realm.RealmArticle
 import yc.dev.newsapi.data.model.local.realm.toArticle
+import javax.inject.Inject
 import kotlin.math.max
 
-class NewsLocalDataSource(
+class NewsLocalDataSource @Inject constructor(
     private val realmConfig: RealmConfiguration
 ) {
 

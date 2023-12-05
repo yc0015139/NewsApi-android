@@ -3,9 +3,8 @@ package yc.dev.newsapi.data.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import yc.dev.newsapi.data.model.Article
-import javax.inject.Inject
 
-class NewsPagingSource @Inject constructor(
+class NewsPagingSource(
     private val dataSource: NewsLocalDataSource,
 ) : PagingSource<Int, Article>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {

@@ -28,8 +28,8 @@ class NewsViewModel @Inject constructor(
     private val constants: Constants,
 ) : ViewModel() {
 
-    private val _articlesState: MutableStateFlow<PagingData<Article>> = MutableStateFlow(value = PagingData.empty())
-    val articlesState: StateFlow<PagingData<Article>> = _articlesState.asStateFlow()
+    private val _newsPagingData: MutableStateFlow<PagingData<Article>> = MutableStateFlow(value = PagingData.empty())
+    val newsPagingData: StateFlow<PagingData<Article>> = _newsPagingData.asStateFlow()
 
     private var refreshJob: Job? = null
 
@@ -44,16 +44,16 @@ class NewsViewModel @Inject constructor(
     val refreshed: SharedFlow<Unit?> = _refreshed.asSharedFlow()
 
     init {
-        observeArticles()
+        observeNewsPagingData()
         refresh()
     }
 
-    private fun observeArticles() {
+    private fun observeNewsPagingData() {
         viewModelScope.launch(dispatcher) {
-            newsRepository.getArticles(constants.newsPageSize)
+            newsRepository.getNewsPagingData(constants.newsPageSize)
                 .cachedIn(viewModelScope)
                 .collectLatest {
-                    _articlesState.value = it
+                    _newsPagingData.value = it
                 }
         }
     }

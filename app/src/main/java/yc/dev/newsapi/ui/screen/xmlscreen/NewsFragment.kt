@@ -75,7 +75,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
 
     private fun observeArticlesState() {
         launchWhenStarted {
-            viewModel.articlesState.collect {
+            viewModel.newsPagingData.collect {
                 pagingAdapter.submitData(it)
             }
         }

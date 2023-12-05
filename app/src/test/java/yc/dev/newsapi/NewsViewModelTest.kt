@@ -48,7 +48,7 @@ class NewsViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         // For init block
-        coEvery { mockNewsRepository.getArticles(any()) } returns flow { }
+        coEvery { mockNewsRepository.getNewsPagingData(any()) } returns flow { }
         coEvery { mockNewsRepository.loadNewsData(any()) } returns flow { }
 
         constants = ConstantsInTest()
@@ -65,9 +65,9 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun initViewModel_observerArticleAndRefreshShouldBeCalled() = runTest {
+    fun initViewModel_observeNewsPagingDataAndRefreshShouldBeCalled() = runTest {
         // Assert
-        coVerify { mockNewsRepository.getArticles(any()) }
+        coVerify { mockNewsRepository.getNewsPagingData(any()) }
         coVerify { mockNewsRepository.loadNewsData(any()) }
     }
 
@@ -110,7 +110,7 @@ class NewsViewModelTest {
      *  [NewsRepositoryTest.getArticlesWithPageSizeAsOneAndScrollToFirstItem_obtainTheFirstAndTheSecondData]
      */
     @Test
-    fun executeGetArticlesInInitBlock_verifyArticlesStateObtainTheFirstAndTheSecondData() = runTest {
+    fun executeGetNewsPagingDataInInitBlock_verifyArticlesStateObtainTheFirstAndTheSecondData() = runTest {
         // Arrange
         val expected = fakeArticles.subList(0, 2) // [a, b, c] > [a, b]
         mockNewsRepository = mockNewsRepositoryManually()
@@ -125,7 +125,7 @@ class NewsViewModelTest {
             dispatcher = testDispatcher,
             constants = constants,
         )
-        val actual = newsViewModel.articlesState.asSnapshot {
+        val actual = newsViewModel.newsPagingData.asSnapshot {
             // Scroll to first item
             scrollTo(0)
         }

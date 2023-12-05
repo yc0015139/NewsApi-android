@@ -33,7 +33,8 @@ class NewsRepository @Inject constructor(
         }
     }.flowOn(dispatcher)
 
-    fun getArticles(pageSize: Int): Flow<PagingData<Article>> {
+    // TODO: Implement the RemoteMediator for Pager
+    fun getNewsPagingData(pageSize: Int): Flow<PagingData<Article>> {
         val pagingConfig = PagingConfig(
             pageSize = pageSize,
             initialLoadSize = pageSize,

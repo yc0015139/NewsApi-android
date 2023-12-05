@@ -99,7 +99,7 @@ class NewsRepositoryTest {
     }
 
     /**
-     * See also [NewsViewModelTest.executeGetArticlesInInitBlock_verifyArticlesStateObtainTheFirstAndTheSecondData]
+     * See also [NewsViewModelTest.executeGetNewsPagingDataInInitBlock_verifyArticlesStateObtainTheFirstAndTheSecondData]
      */
     @Test
     fun getArticlesWithPageSizeAsOneAndScrollToFirstItem_obtainTheFirstAndTheSecondData() = runTest {
@@ -118,7 +118,7 @@ class NewsRepositoryTest {
         )
 
         // Act
-        val actual = newsRepository.getArticles(pageSize = 1).asSnapshot {
+        val actual = newsRepository.getNewsPagingData(pageSize = 1).asSnapshot {
             // Scroll to first item
             scrollTo(0)
         }
@@ -127,7 +127,7 @@ class NewsRepositoryTest {
         /**
          * When pageSize = 1 and the [SnapshotLoader] scroll to index 0. The `mockNewsPagingSource.load()` should be called twice.
          *
-         * `PagingConfig.initialLoadSize = pageSize` had been set in [NewsRepository.getArticles] and
+         * `PagingConfig.initialLoadSize = pageSize` had been set in [NewsRepository.getNewsPagingData] and
          *  [PagingConfig.prefetchDistance] as [PagingConfig.pageSize] on default.
          * So the `mockNewsPagingSource.load()` will be called
          *  [PagingConfig.initialLoadSize] + [PagingConfig.prefetchDistance]

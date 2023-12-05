@@ -7,8 +7,11 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,6 +36,13 @@ class NewsViewModel @Inject constructor(
     private val _loadingState: MutableStateFlow<UiState?> = MutableStateFlow(value = null)
     val loadingState: StateFlow<UiState?> = _loadingState.asStateFlow()
 
+    /**
+     * TODO: Check the edge case of this event
+     * [video link for reference](https://youtu.be/njchj9d_Lf8)
+     */
+    private val _refreshed: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val refreshed: SharedFlow<Unit?> = _refreshed.asSharedFlow()
+
     init {
         observeArticles()
         refresh()
@@ -54,6 +64,10 @@ class NewsViewModel @Inject constructor(
             _loadingState.value = null
             newsRepository.loadNewsData(COUNTRY_US).collect {
                 _loadingState.value = it
+
+                if (it == UiState.Success) {
+                    _refreshed.emit(Unit)
+                }
             }
         }
     }

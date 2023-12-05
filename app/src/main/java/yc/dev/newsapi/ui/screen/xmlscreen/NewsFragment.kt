@@ -40,6 +40,12 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         binding.splNews.setOnRefreshListener {
             viewModel.refresh()
         }
+
+        launchWhenStarted {
+            viewModel.refreshed.collect {
+                pagingAdapter.refresh()
+            }
+        }
     }
 
     private fun setupRecyclerView() {

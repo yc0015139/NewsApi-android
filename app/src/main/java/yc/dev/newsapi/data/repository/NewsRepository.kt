@@ -19,7 +19,6 @@ import javax.inject.Inject
 class NewsRepository @Inject constructor(
     private val newsDataSource: NewsDataSource,
     private val newsLocalDataSource: NewsLocalDataSource,
-    private val newsPagingSource: NewsPagingSource,
     private val dispatcher: CoroutineDispatcher,
 ) {
     suspend fun loadNewsData(country: String) = flow {
@@ -39,8 +38,7 @@ class NewsRepository @Inject constructor(
             pageSize = pageSize,
             initialLoadSize = pageSize,
         )
-        return Pager(config = pagingConfig) { newsPagingSource }
+        return Pager(config = pagingConfig) { NewsPagingSource(newsLocalDataSource) }
             .flow
-            .flowOn(dispatcher)
     }
 }
